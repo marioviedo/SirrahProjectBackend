@@ -1,5 +1,10 @@
 import { connect } from "../database"
 
+/**
+ * 
+ * Gets -> selects
+ * 
+ */
 export const getRoutine = async (req, res) =>{
     const id_user = [req.params.idUser]
     const dbConnection = await connect()
@@ -15,3 +20,15 @@ export const getRoutine = async (req, res) =>{
     const [response] = await dbConnection.query(query, id_user)
     res.json(response)
 }
+
+/**
+ * Posts -> inserts
+ */
+
+/**
+ * Puts -> updates
+ */
+
+/**
+ * Deletes -> Deletes
+ */
