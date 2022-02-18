@@ -3,7 +3,7 @@ import { connect } from "../database"
 export const getRoutine = async (req, res) =>{
     const id_user = [req.params.idUser]
     const dbConnection = await connect()
-    const query = 'select u.username, mg.name as "muscleGroup", m.name as "muscle", t.name as "Ejercicio", s.repetition as "Repeticiones", s.weight, s.series, rou.day, rou.break_time '+ 
+    const query = 'select mg.name as "muscleGroup", m.name as "muscle", t.name as "training_name", s.repetition as "reps", s.weight, s.series, rou.day, rou.break_time '+ 
     'from users as u, restrictions as res, muscles as m, musclegroups as mg, training as t, sets as s, routines as rou '+ 
     'where u.id_user=res.id_user and '+
     'res.id_restriction=m.id_restriction and '+
