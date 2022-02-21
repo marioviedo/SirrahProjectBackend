@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getRoutine } from "../controllers/routinesController";
+import { createMuscle, getRoutine } from "../controllers/routinesController";
 
 
-const routinesRoutes = Router()
+const routinesRoutes = Router();
 
-routinesRoutes.get("/routines/:idUser", getRoutine)
+routinesRoutes.get("/routines/:idUser", getRoutine);
+routinesRoutes.post("/muscles", createMuscle);
 
-export default routinesRoutes
+export default routinesRoutes;

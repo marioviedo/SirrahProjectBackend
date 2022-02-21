@@ -3,8 +3,8 @@ import { createMuscleGroup, getMuscleGroups } from "../controllers/configuration
 
 const configurationRoutes = Router();
 
-configurationRoutes.get("/musclegroups", getMuscleGroups)
+configurationRoutes.get("/musclegroups", getMuscleGroups);
 
-configurationRoutes.post("/musclegroups", createMuscleGroup)
+configurationRoutes.post("/musclegroups", createMuscleGroup);
 
-export default configurationRoutes
+export default configurationRoutes;

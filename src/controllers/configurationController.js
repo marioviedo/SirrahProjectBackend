@@ -1,4 +1,5 @@
-import { connect } from "../database"
+import { connect } from "../database";
+import { createMuscleGroupModel, createTypeRestrictionModel, getMuscleGroupsModel } from "../models/configurationModel";
 
 /**
  * 
@@ -6,19 +7,20 @@ import { connect } from "../database"
  * 
  */
 export const getMuscleGroups = async (req, res)=>{
-    const dbConnection = await connect()
-    const [response] = await dbConnection.query("SELECT * FROM musclegroups")
-    res.json(response)
+	res.json(await getMuscleGroupsModel());
 }
 
 /**
  * Posts -> inserts
  */
 export const createMuscleGroup = async (req, res)=>{
-    const arrayData = [req.body.name]
-    const dbConnection = await connect()
-    const [response] = await dbConnection.query("INSERT INTO musclegroups(name) VALUES(?)", arrayData)
-    res.json(response)
+	const muscleGroupData = [req.body.name];
+	res.json(createMuscleGroupModel(muscleGroupData));
+}
+
+export const createTypeRestriction = async (req, res)=>{
+	const dataTypeRestriction = [req.body.name, req.body.unit];
+	res.json(createTypeRestrictionModel(dataTypeRestriction));
 }
 
 /**

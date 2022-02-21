@@ -1,4 +1,5 @@
-import { connect } from "../database"
+import { createMuscleModel, createRestrictionMdel, getRoutineModel } from "../models/routinesModel";
+
 
 /**
  * 
@@ -6,24 +7,33 @@ import { connect } from "../database"
  * 
  */
 export const getRoutine = async (req, res) =>{
-    const id_user = [req.params.idUser]
-    const dbConnection = await connect()
-    const query = 'select mg.name as "muscleGroup", m.name as "muscle", t.name as "training_name", s.repetition as "reps", s.weight, s.series, rou.day, rou.break_time '+ 
-    'from users as u, restrictions as res, muscles as m, musclegroups as mg, training as t, sets as s, routines as rou '+ 
-    'where u.id_user=res.id_user and '+
-    'res.id_restriction=m.id_restriction and '+
-    'mg.id_musclegroup=m.id_musclegroup and '+
-    'm.id_muscle=t.id_muscle and '+
-    't.id_training=s.id_training and '+
-    's.id_set=rou.id_set and '+
-    'u.id_user=?';
-    const [response] = await dbConnection.query(query, id_user)
-    res.json(response)
+	const id_user = [req.params.idUser];
+	res.json(await getRoutineModel(id_user));
 }
 
 /**
  * Posts -> inserts
  */
+export const createMuscle = async (req, res) =>{
+	const dataRestriction = [
+		req.body.restrictions.id_typeRestriction,
+		req.body.restrictions.id_user,
+		req.body.restrictions.value,
+		req.body.restrictions.operator
+	];
+	const responseRestriction = await createRestrictionMdel(dataRestriction);
+	const dataMuscle = [
+		req.body.muscle.id_muscleGroup,
+		responseRestriction.insertId, // id_restriction
+		req.body.muscle.name
+	];
+	const responseMuscle = await createMuscleModel(dataMuscle);
+	res.json(responseMuscle);
+}
+
+export const createTrainig = async (req, res) =>{
+	const data = [req.body];
+}
 
 /**
  * Puts -> updates
