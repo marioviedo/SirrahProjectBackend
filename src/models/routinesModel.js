@@ -15,7 +15,7 @@ export const getRoutineModel = async (id_user) =>{
     return response;
 }
 
-export const createRestrictionMdel = async(dataRestriction)=>{
+export const createRestrictionModel = async(dataRestriction)=>{
 	const dbConnection = await connect();
 	const query = "INSERT INTO restrictions(id_typeRestriction, id_user, value, operator) VALUES(?, ?, ?, ?)";
 	const [response] = await dbConnection.query(query, dataRestriction);

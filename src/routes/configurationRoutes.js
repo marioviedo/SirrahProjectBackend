@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { createMuscleGroup, getMuscleGroups } from "../controllers/configurationController";
+import { createMuscleGroupController, getMuscleGroupsController } from "../controllers/configurationController";
 
 const configurationRoutes = Router();
 
-configurationRoutes.get("/musclegroups", getMuscleGroups);
+configurationRoutes.get("/musclegroups", getMuscleGroupsController);
 
-configurationRoutes.post("/musclegroups", createMuscleGroup);
+configurationRoutes.post("/musclegroups", createMuscleGroupController);
 
 export default configurationRoutes;

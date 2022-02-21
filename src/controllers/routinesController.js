@@ -1,4 +1,4 @@
-import { createMuscleModel, createRestrictionMdel, getRoutineModel } from "../models/routinesModel";
+import { createMuscleModel, createRestrictionModel, getRoutineModel } from "../models/routinesModel";
 
 
 /**
@@ -6,7 +6,7 @@ import { createMuscleModel, createRestrictionMdel, getRoutineModel } from "../mo
  * Gets -> selects
  * 
  */
-export const getRoutine = async (req, res) =>{
+export const getRoutineController = async (req, res) =>{
 	const id_user = [req.params.idUser];
 	res.json(await getRoutineModel(id_user));
 }
@@ -14,14 +14,14 @@ export const getRoutine = async (req, res) =>{
 /**
  * Posts -> inserts
  */
-export const createMuscle = async (req, res) =>{
+export const createMuscleController = async (req, res) =>{
 	const dataRestriction = [
 		req.body.restrictions.id_typeRestriction,
 		req.body.restrictions.id_user,
 		req.body.restrictions.value,
 		req.body.restrictions.operator
 	];
-	const responseRestriction = await createRestrictionMdel(dataRestriction);
+	const responseRestriction = await createRestrictionModel(dataRestriction);
 	const dataMuscle = [
 		req.body.muscle.id_muscleGroup,
 		responseRestriction.insertId, // id_restriction
@@ -31,7 +31,7 @@ export const createMuscle = async (req, res) =>{
 	res.json(responseMuscle);
 }
 
-export const createTrainig = async (req, res) =>{
+export const createTrainigController = async (req, res) =>{
 	const data = [req.body];
 }
 

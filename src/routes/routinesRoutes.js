@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { createMuscle, getRoutine } from "../controllers/routinesController";
+import { createMuscleController, getRoutineController } from "../controllers/routinesController";
 
 
 const routinesRoutes = Router();
 
-routinesRoutes.get("/routines/:idUser", getRoutine);
-routinesRoutes.post("/muscles", createMuscle);
+routinesRoutes.get("/routines/:idUser", getRoutineController);
+routinesRoutes.post("/muscles", createMuscleController);
 
 export default routinesRoutes;
