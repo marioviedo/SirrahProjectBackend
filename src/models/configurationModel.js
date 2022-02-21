@@ -6,14 +6,14 @@ export const getMuscleGroupsModel = async ()=>{
     return response;
 }
 
-export const createMuscleGroupModel = async (dataArray)=>{
+export const createMuscleGroupModel = async (dataMuscleGroup)=>{
     const dbConnection = await connect();
-	const [response] = await dbConnection.query("INSERT INTO musclegroups(name) VALUES(?)", arrayData);
+	const [response] = await dbConnection.query("INSERT INTO musclegroups(name) VALUES(?)", dataMuscleGroup);
     return response;
 }
 
-export const createTypeRestrictionModel = async (typeRestrictionData)=>{
+export const createTypeRestrictionModel = async (dataTypeRestriction)=>{
     const dbConnection = await connect();
-    const [response] = await dbConnection.query("INSERT INTO cattyperestrictions(name, unit) VALUES(?, ?)", typeRestrictionData);
+    const [response] = await dbConnection.query("INSERT INTO cattyperestrictions(name, unit) VALUES(?, ?)", dataTypeRestriction);
     return response;
 }

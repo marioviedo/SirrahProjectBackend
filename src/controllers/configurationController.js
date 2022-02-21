@@ -14,8 +14,8 @@ export const getMuscleGroupsController = async (req, res)=>{
  * Posts -> inserts
  */
 export const createMuscleGroupController = async (req, res)=>{
-	const muscleGroupData = [req.body.name];
-	res.json(createMuscleGroupModel(muscleGroupData));
+	const dataMuscleGroup = [req.body.name];
+	res.json(createMuscleGroupModel(dataMuscleGroup));
 }
 
 export const createTypeRestrictionController = async (req, res)=>{

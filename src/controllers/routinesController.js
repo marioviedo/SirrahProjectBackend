@@ -1,4 +1,4 @@
-import { createMuscleModel, createRestrictionModel, getRoutineModel } from "../models/routinesModel";
+import { createMuscleModel, createRestrictionModel, createTrainingModel, getRoutineModel } from "../models/routinesModel";
 
 
 /**
@@ -32,7 +32,12 @@ export const createMuscleController = async (req, res) =>{
 }
 
 export const createTrainigController = async (req, res) =>{
-	const data = [req.body];
+	const dataTraining = [
+		req.body.id_muscle,
+		req.body.name
+	];
+	const responseTraining = await createTrainingModel(dataTraining);
+	res.json(responseTraining);
 }
 
 /**

@@ -28,3 +28,10 @@ export const createMuscleModel = async(dataMuscle)=>{
 	const [response] = await dbConnection.query(query, dataMuscle);
 	return response;
 }
+
+export const createTrainingModel = async(dataTraining)=>{
+	const dbConnection = await connect();
+	const query = "INSERT INTO training(id_muscle, name) VALUES(?, ?)";
+	const [response] = await dbConnection.query(query, dataTraining);
+	return response;
+}
