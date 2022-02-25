@@ -1,5 +1,4 @@
-import { connect } from "../database";
-import { createMuscleGroupModel, createTypeRestrictionModel, getMuscleGroupsModel } from "../models/configurationModel";
+import { createMuscleGroupModel, createTypeRestrictionModel, deleteTypeRestrictionModel, getMuscleGroupsModel } from "../models/configurationModel";
 
 /**
  * 
@@ -30,3 +29,7 @@ export const createTypeRestrictionController = async (req, res)=>{
 /**
  * Deletes -> Deletes
  */
+export const deleteTypeRestrictionController = async (req, res)=>{
+	const id_typeRestriction = req.params.id_typeRestriction;
+	res.json(deleteTypeRestrictionModel(id_typeRestriction));
+}
