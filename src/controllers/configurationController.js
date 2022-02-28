@@ -14,12 +14,12 @@ export const getMuscleGroupsController = async (req, res)=>{
  */
 export const createMuscleGroupController = async (req, res)=>{
 	const dataMuscleGroup = [req.body.name];
-	res.json(createMuscleGroupModel(dataMuscleGroup));
+	res.status(201).json(createMuscleGroupModel(dataMuscleGroup));
 }
 
 export const createTypeRestrictionController = async (req, res)=>{
 	const dataTypeRestriction = [req.body.name, req.body.unit];
-	res.json(createTypeRestrictionModel(dataTypeRestriction));
+	res.status(201).json(createTypeRestrictionModel(dataTypeRestriction));
 }
 
 /**

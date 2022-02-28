@@ -28,7 +28,7 @@ export const createMuscleController = async (req, res) =>{
 		req.body.muscle.name
 	];
 	const responseMuscle = await createMuscleModel(dataMuscle);
-	res.json(responseMuscle);
+	res.status(201).json(responseMuscle);
 }
 
 export const createTrainigController = async (req, res) =>{
@@ -37,7 +37,7 @@ export const createTrainigController = async (req, res) =>{
 		req.body.name
 	];
 	const responseTraining = await createTrainingModel(dataTraining);
-	res.json(responseTraining);
+	res.status(201).json(responseTraining);
 }
 
 /**
