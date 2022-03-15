@@ -16,7 +16,8 @@ export const roles = {
 
 export const webConfig = {
 	protocol:"http",
-	host:"localhost:3000/"
+	host:"localhost:3000/",
+	changePasswordView:"changePassWordView"
 }
 
 export const emailTransportConfig = {

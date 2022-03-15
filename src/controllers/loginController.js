@@ -84,7 +84,7 @@ export const askForChangePassword = async (req, res)=>{
             expiresIn:86400
         });
         const response = {
-            link: webConfig.protocol+ "://" + webConfig.host + "changePasswordView?token=" + token,
+            link: webConfig.protocol+ "://" + webConfig.host + webConfig.changePasswordView + "?token=" + token,
             token
         }
         const account = (emailTransportConfig.testAccount) ? await nodemailer.createTestAccount() : {user:emailTransportConfig.authUser, pass:emailTransportConfig.authPass};
