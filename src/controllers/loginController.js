@@ -33,7 +33,8 @@ export const signUp = async(req, res)=>{
     // registrar usuario
     const encryptedPassword = await encryptPassword(req.body.password);
     const dataUser = [req.body.username, encryptedPassword, req.body.email];
-    const responseFindUser = await findUserInBD(dataUser);
+    const dataUserAssocToFindInBd = {username:req.body.username, email:req.body.email};
+    const responseFindUser = await findUserInBD(dataUserAssocToFindInBd);
     let dataRoles = [];
     if(req.body.roles){
         const {roles} = req.body;
@@ -66,27 +67,30 @@ export const signUp = async(req, res)=>{
     }
 }
 
-const findUserInBD = async (dataUser)=>{
-    const userByUsername = await findUserByUsername(dataUser[0]); 
-    const userByEmail = await findUserByEmail(dataUser[2]);
+const findUserInBD = async ({username = "", email=""})=>{
+    const userByUsername = await findUserByUsername(username); 
+    const userByEmail = await findUserByEmail(email);
     const isInBd = (userByUsername.length != 0 || userByEmail.length != 0) ? true : false;
     return isInBd;
 }
 
 export const askForChangePassword = async (req, res)=>{
     const dataUser = [req.body.email];
-    const responseFindUser = await findUserByEmail(dataUser[0]);
-    if(responseFindUser.length == 0)
+    const dataUserAssocToFindInBd = {email:req.body.email};
+    const responseFindUser = await findUserInBD(dataUserAssocToFindInBd);
+    if(!responseFindUser)
     {
         res.status(404).json({message:"Correo no encontrado"});
     }else{
         const token = Jwt.sign({email:dataUser[0]}, secrets.secret, {
             expiresIn:86400
         });
+
         const response = {
             link: webConfig.protocol+ "://" + webConfig.host + webConfig.changePasswordView + "?token=" + token,
             token
-        }
+        };
+
         const account = (emailTransportConfig.testAccount) ? await nodemailer.createTestAccount() : {user:emailTransportConfig.authUser, pass:emailTransportConfig.authPass};
         let transporter = nodemailer.createTransport({
             host:emailTransportConfig.host,
@@ -105,8 +109,10 @@ export const askForChangePassword = async (req, res)=>{
             text:"Ingresa a este enlace para cambiar tu contraseña: " + response['link'],
             //html:"<br>hello<br>"
         });
+
         console.log("Correo enviado: ");
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        
         res.status(200).json(response);
     }
 }
