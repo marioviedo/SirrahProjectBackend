@@ -1,7 +1,8 @@
 import { createRolesUser, createUser, findUserByEmail, findUserByUsername, updatePasswordByEmail } from "../models/loginModel";
 import bcrypt from "bcryptjs";
 import Jwt  from "jsonwebtoken";
-import { secrets, webConfig } from "../config";
+import nodemailer from "nodemailer"
+import { emailTransportConfig, secrets, webConfig } from "../config";
 
 export const signIn = async (req, res)=>{
     // iniciar sesion
@@ -74,15 +75,40 @@ const findUserInBD = async (dataUser)=>{
 
 export const askForChangePassword = async (req, res)=>{
     const dataUser = [req.body.email];
-    const token = Jwt.sign({email:dataUser[0]}, secrets.secret, {
-        expiresIn:86400
-    });
-    // agregar enviar el token por correo y abrir liga para cambiar la contraseña
-    res.json({
-        link: webConfig.protocol+ "://" + webConfig.host + "changePasswordView?token=" + token,
-        token
-    });
-    //res.status(200).json({token}); 
+    const responseFindUser = await findUserByEmail(dataUser[0]);
+    if(responseFindUser.length == 0)
+    {
+        res.status(404).json({message:"Correo no encontrado"});
+    }else{
+        const token = Jwt.sign({email:dataUser[0]}, secrets.secret, {
+            expiresIn:86400
+        });
+        const response = {
+            link: webConfig.protocol+ "://" + webConfig.host + "changePasswordView?token=" + token,
+            token
+        }
+        const account = (emailTransportConfig.testAccount) ? await nodemailer.createTestAccount() : {user:emailTransportConfig.authUser, pass:emailTransportConfig.authPass};
+        let transporter = nodemailer.createTransport({
+            host:emailTransportConfig.host,
+            port:emailTransportConfig.port,
+            secure:emailTransportConfig.secure,
+            auth:{
+                user:account.user,
+                pass:account.pass
+            }
+        });
+    
+        const info = await transporter.sendMail({
+            from:'"Fred Foo" <foo@example.com>',
+            to:dataUser[0],
+            subject:"Hello world",
+            text:"Ingresa a este enlace para cambiar tu contraseña: " + response['link'],
+            //html:"<br>hello<br>"
+        });
+        console.log("Correo enviado: ");
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        res.status(200).json(response);
+    }
 }
 
 export const changePassword = async (req, res)=>{
