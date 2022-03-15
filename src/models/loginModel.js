@@ -7,6 +7,13 @@ export const findUserByUsername = async(username)=>{
     return response;
 }
 
+export const findUserByEmail = async(email)=>{
+    const dbConnection = await connect();
+    const query = "SELECT u.id_user as id_user, username, password, email, r.id_rol, r.name as rol FROM users as u, roles_users as ru, roles as r WHERE u.id_user=ru.id_user and r.id_rol=ru.id_rol and email=?";
+    const [response] = await dbConnection.query(query, email);
+    return response;
+}
+
 export const finUdserById = async(idUser)=>{
     const dbConnection = await connect();
     const query = "SELECT * FROM users WHERE id_user=?";
@@ -39,5 +46,12 @@ export const createRolesUser = async (dataRolUser)=>{
     const dbConnection = await connect();
     const query = "INSERT INTO roles_users(id_user, id_rol) VALUES(?,?)";
     const [response] = await dbConnection.query(query, dataRolUser);
+    return response;
+}
+
+export const updatePasswordByEmail = async (dataUser)=>{
+    const dbConnection = await connect();
+    const query = "UPDATE users SET password=? WHERE email=?";
+    const [response] = await dbConnection.query(query, dataUser);
     return response;
 }

@@ -1,8 +1,8 @@
 import Jwt  from "jsonwebtoken";
 import { roles, secrets } from "../config";
-import { findRolByName, findRolesUserByIds, finUdserById } from "../models/loginModel";
+import { findRolByName, findRolesUserByIds, findUserByEmail, finUdserById } from "../models/loginModel";
 
-export const verifyToken = async (req, res, next)=>{
+export const verifyTokenUser = async (req, res, next)=>{
     const token = req.headers["x-access-token"];
 
     if(!token){
@@ -21,6 +21,26 @@ export const verifyToken = async (req, res, next)=>{
             return res.status(401).json({message:"Unauthorized"});
         }
         
+    }
+}
+
+export const verifyTokenChangePassword = async (req, res, next)=>{
+    const token = req.headers["x-access-token"];
+    if(!token){
+        return res.status(403).json({message:"No token provided"});
+    }else{
+        try {
+            const decoded = Jwt.verify(token, secrets.secret);
+            req.userEmail_to_ChangePassword = decoded['email'];
+            const userResponse = await findUserByEmail(req.userEmail_to_ChangePassword);            
+            if(!userResponse){
+                return res.status(404).json({message:"Not email or user found"});
+            }else{
+                next();
+            }
+        } catch (error) {
+            return res.status(401).json({message:"Unauthorized"});
+        }
     }
 }
 

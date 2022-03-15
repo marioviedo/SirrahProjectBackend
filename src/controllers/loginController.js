@@ -1,7 +1,7 @@
-import { createRolesUser, createUser, findUserByUsername } from "../models/loginModel";
+import { createRolesUser, createUser, findUserByEmail, findUserByUsername, updatePasswordByEmail } from "../models/loginModel";
 import bcrypt from "bcryptjs";
 import Jwt  from "jsonwebtoken";
-import { secrets } from "../config";
+import { secrets, webConfig } from "../config";
 
 export const signIn = async (req, res)=>{
     // iniciar sesion
@@ -32,7 +32,7 @@ export const signUp = async(req, res)=>{
     // registrar usuario
     const encryptedPassword = await encryptPassword(req.body.password);
     const dataUser = [req.body.username, encryptedPassword, req.body.email];
-    const responseFindUser = await findUserByUsername(dataUser[0]);
+    const responseFindUser = await findUserInBD(dataUser);
     let dataRoles = [];
     if(req.body.roles){
         const {roles} = req.body;
@@ -46,7 +46,7 @@ export const signUp = async(req, res)=>{
     }else{
         dataRoles.push(3);
     }
-    if(responseFindUser.length == 0)
+    if(!responseFindUser)
     {
         const responseAfterCreated = await createUser(dataUser);
 
@@ -61,9 +61,35 @@ export const signUp = async(req, res)=>{
         res.status(201).json({token});    
     }
     else{
-        res.json(responseFindUser);
+        res.json({message:"Error al registrar: el usuario o el email ya se encuentran registrados"});
     }
-    
+}
+
+const findUserInBD = async (dataUser)=>{
+    const userByUsername = await findUserByUsername(dataUser[0]); 
+    const userByEmail = await findUserByEmail(dataUser[2]);
+    const isInBd = (userByUsername.length != 0 || userByEmail.length != 0) ? true : false;
+    return isInBd;
+}
+
+export const askForChangePassword = async (req, res)=>{
+    const dataUser = [req.body.email];
+    const token = Jwt.sign({email:dataUser[0]}, secrets.secret, {
+        expiresIn:86400
+    });
+    // agregar enviar el token por correo y abrir liga para cambiar la contraseña
+    res.json({
+        link: webConfig.protocol+ "://" + webConfig.host + "changePasswordView?token=" + token,
+        token
+    });
+    //res.status(200).json({token}); 
+}
+
+export const changePassword = async (req, res)=>{
+    const encryptedPassword = await encryptPassword(req.body.password);
+    const dataUser = [encryptedPassword, req.userEmail_to_ChangePassword];
+    const responseUpdateUser = await updatePasswordByEmail(dataUser);
+    return res.json(responseUpdateUser);
 }
 
 export const encryptPassword =  async(password)=>{

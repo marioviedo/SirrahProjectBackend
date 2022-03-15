@@ -7,7 +7,7 @@ import { createMuscleModel, createRestrictionModel, createTrainingModel, getRout
  * 
  */
 export const getRoutineController = async (req, res) =>{
-	const id_user = [req.params.idUser];
+	const id_user = [req.id_user];
 	res.json(await getRoutineModel(id_user));
 }
 

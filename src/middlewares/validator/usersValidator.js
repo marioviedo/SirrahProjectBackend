@@ -17,3 +17,17 @@ export const validateLoginUser = [
         validateResult(req, res, next);
     }
 ];
+
+export const validateAskForChangePassword = [
+    body('email').exists().isEmail().not().isEmpty(),
+    (req, res, next)=>{
+        validateResult(req, res, next);
+    }
+];
+
+export const validateChangePassword = [
+    body('password').exists().not().isEmpty(),
+    (req, res, next)=>{
+        validateResult(req, res, next);
+    }
+];

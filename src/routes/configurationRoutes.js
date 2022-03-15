@@ -4,11 +4,11 @@ import { authJwt } from "../middlewares";
 
 const configurationRoutes = Router();
 
-configurationRoutes.get("/musclegroups", [authJwt.verifyToken, authJwt.isAdmin], getMuscleGroupsController);
+configurationRoutes.get("/musclegroups", [authJwt.verifyTokenUser, authJwt.isAdmin], getMuscleGroupsController);
 
-configurationRoutes.post("/musclegroups", [authJwt.verifyToken, authJwt.isAdmin], createMuscleGroupController);
-configurationRoutes.post("/typeRestrictions", [authJwt.verifyToken, authJwt.isAdmin], createTypeRestrictionController);
+configurationRoutes.post("/musclegroups", [authJwt.verifyTokenUser, authJwt.isAdmin], createMuscleGroupController);
+configurationRoutes.post("/typeRestrictions", [authJwt.verifyTokenUser, authJwt.isAdmin], createTypeRestrictionController);
 
-configurationRoutes.delete("/typeRestrictions", [authJwt.verifyToken, authJwt.isAdmin], deleteTypeRestrictionController);
+configurationRoutes.delete("/typeRestrictions", [authJwt.verifyTokenUser, authJwt.isAdmin], deleteTypeRestrictionController);
 
 export default configurationRoutes;
